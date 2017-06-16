@@ -1,0 +1,105 @@
+---
+title: "Cleaning_Queens_Data"
+author: "Kevin"
+date: "June 15, 2017"
+output: html_document
+---
+
+# Queens Data Explaratory data Analysis
+
+This documents presents the processing of cleaning and analysing queens dataset
+
+```{r}
+#Required packages
+packages <- c("ggplot2","plyr", "dygraphs, dplyr")
+
+#Check if the package is installed. if not, install it.
+
+is.installed <- function(mypkg){
+  is.element(mypkg, installed.packages()[,1])
+}
+
+for(package in packages){
+  # check if package is installed
+  if (!is.installed(package)){
+    install.packages(package, repos = "https://cran.r-project.org/")
+  }else {print(paste(package, " is library already installed"))}
+}
+
+#load the required packages
+print("loading the required packages!")
+lapply(packages, require, character.only = TRUE)
+
+sessionInfo()
+```
+
+Loading the Queens Dataset and exploratory
+```{r}
+# read csv file
+queens<- read.csv("rollingsales_queens.csv",skip=4,header=TRUE)
+
+dim(queens)
+
+names(queens)
+
+head(queens)
+
+tail(queens)
+
+str(queens)
+
+summary(queens)
+
+
+```
+
+Clean the data
+
+```{r}
+queens$SALE.PRICE.N <- as.numeric(gsub("[^[:digit:]]","", queens$SALE.PRICE))
+
+#Check the number of NAs that exist
+count(is.na(queens$SALE.PRICE.N))
+
+names(queens) <- tolower(names(queens)) # make all variable names lower case
+
+## Get rid of leading digits
+queens$gross.sqft <- as.numeric(gsub("[^[:digit:]]","", queens$gross.square.feet))
+queens$land.sqft <- as.numeric(gsub("[^[:digit:]]","", queens$land.square.feet))
+queens$year.built <- as.numeric(as.character(queens$year.built))
+
+attach(queens)
+#hist(sale.price.n) 
+qplot(sale.price.n, geom="histogram")
+detach(queens)
+
+```
+```{r}
+## keep only the actual sales
+
+queens.sale <- queens[queens$sale.price.n!=0,]
+plot(queens.sale$gross.sqft,queens.sale$sale.price.n)
+
+p <- ggplot(queens, aes(queens.sale$gross.sqft, queens.sale$sale.price.n))
+p + geom_point()
+# Add aesthetic mappings
+#p + geom_point(aes(colour = factor(queens$neighborhood)))
+
+y <- ggplot(queens, aes(log10(queens.sale$gross.sqft), log10(queens.sale$sale.price.n)))
+y + geom_point()
+
+#plot(log10(queens.sale$gross.sqft),log10(queens.sale$sale.price.n))
+
+## for now, let's look at 1-, 2-, and 3-family homes
+queens.homes <- queens.sale[which(grepl("FAMILY",queens.sale$building.class.category)),]
+dim(queens.homes)
+plot(log10(queens.homes$gross.sqft),log10(queens.homes$sale.price.n))
+summary(queens.homes[which(queens.homes$sale.price.n<100000),])
+""
+
+## remove outliers that seem like they weren't actual sales
+queens.homes$outliers <- (log10(queens.homes$sale.price.n) <=5) + 0
+queens.homes <- queens.homes[which(queens.homes$outliers==0),]
+plot(log10(queens.homes$gross.sqft),log10(queens.homes$sale.price.n))
+```
+
