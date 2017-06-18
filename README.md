@@ -3,12 +3,11 @@ This is a group project on creating projects in RStudio for Doing Datascience Cl
 
 We will be using the data from the rolling Data Sales website, linked here(http://www1.nyc.gov/site/finance/taxes/property-rolling-sales-data.page)
 
-## Goal: 
-Create an RStudio project for the analysis of this data set. 
-Your file structure within the project should include the following:
-1. _A README file_ in the project root directory that includes an explanation of the purpose of the project and the other files
-2. _A data directory_ containing files to load in and clean up the data. The clean up should include finding out where there are outliers or missing values, deciding how you will treat them, making sure values you think are numerical are being treated as such (correct R class), etc.
-3. _An Analysis directory_ containing a file (or files) for exploratory data analysis on the clean data to visualize compare the square footage and sales price for your neighborhood.
+Our Dataset is  for Queens neighborhood
+
+### Our Git repository for the project has two folders:
+1. _A data directory_ contains a `cleaning.RMD` file to load in `rollingsales_queens.csv` dataset and clean it up. Cleaning the data includes finding outliers or missing values, deciding how you will treat them, making sure values we think are numerical are being treated as such. The foldered contains cleaned queens data `rollingsales_queens_clean.csv`
+2. _An Analysis directory_ contains `analysis.RMD` file for exploratory data analysis on the clean data and  visualization to compare the square footage and sales price for queens neighborhood. A summarized report `Queens_analysis.docx`
   
 ## Deliverable:
-A link to a repository on GitHub containing the above. I need only one link per group. Since this is a group project, I expect you to divide the labor.
+deliverable for this project will be a link to a repository on GitHub containing our analysis. 
