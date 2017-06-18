@@ -1,17 +1,17 @@
 ---
-title: "Queens_Data_Analysis"
+title: "Queen's_Data_Analysis_Report"
 author: "Bryan_Kevin_Ruhaab"
-date: "June 15, 2017"
+date: "June 18, 2017"
 output: word_document
 ---
 
-# Queens Data Explaratory data Analysis
+# Cleaned Queens Data Exploratory data Analysis
 
-This documents presents the processing of cleaning and analysing queens dataset
+This documents presents the  analysis of queens dataset that has been cleaned
 
 ```{r}
 #Required packages
-packages <- c("ggplot2","plyr", "dygraphs, dplyr")
+packages <- c("ggplot2","plyr")
 
 #Check if the package is installed. if not, install it.
 
@@ -28,42 +28,63 @@ for(package in packages){
 
 #load the required packages
 print("loading the required packages!")
-lapply(packages, require, character.only = TRUE)
+suppressMessages(lapply(packages, require, character.only = TRUE))
 
-sessionInfo()
+
 ```
 
-Loading the Queens Dataset and exploratory
+## Loading clean Queens Dataset and exploratory
 ```{r}
 # read csv file
 queens<- data.frame(read.csv("C:/Users/kevolo/Desktop/smu/doing datascience/DoingDataScienceGroupProject/data/rollingsales_queens_clean.csv",skip=0,header=TRUE))
 
+# check the number of rows and columns that exist
 dim(queens)
 
+# List the columns names
 names(queens)
 
-head(queens)
+#check what the data looks like
+head(queens, 3)
+tail(queens, 3)
 
-tail(queens)
-
+#check the structure of your dataset
 str(queens)
 
+
+# get the summary of the data
 summary(queens)
 
 
 ```
+## Queens data Visualization Gross_Sqft VS SalePrice
+
+```{r}
+#queens.sale$gross.sqft vs queens.sale$sale.price.n
+p <- ggplot(queens, aes(queens$gross.sqft, queens$sale.price.n))
+p + geom_point()+ labs(title ="Gross_Sqft VS SalePrice", x = "Gross.Sqft", y = "Sale.Price") 
+
+#log10(queens.sale$gross.sqft) vs log10(queens.sale$sale.price.n)
+y <- ggplot(queens, aes(log10(queens$gross.sqft), log10(queens$sale.price.n)))
+y + geom_point()+labs(title ="Log10(Gross_Sqft) VS Log10(SalePrice)", x = "Log10(Gross.Sqft)", y = "Log10(Sale.Price") 
+
+```
+## Other Visualizations
+```{r}
+#Histogram of log saleprice
+ggplot(queens, aes(log10(queens$sale.price.n)))+ geom_histogram()+
+  labs(title ="Histogram of Log10(SalePrice)", x = "Log10(SalePrice)", y = "Count") 
+
+#histogram of gross.sqft
+ggplot(queens, aes(log10(queens$gross.sqft)))+ geom_histogram()+
+  labs(title ="Histogram of Log10(Gross_Sqft)", x = "Log10(Gross.SqFT)", y = "Count") 
+
+```
+
+
 
 
 ```{r}
-#plot(queens.sale$gross.sqft,queens.sale$sale.price.n)
-p <- ggplot(queens, aes(queens.sale$gross.sqft, queens.sale$sale.price.n))
-p + geom_point()
-
-#plot log10(queens.sale$gross.sqft,queens.sale$sale.price.n)
-y <- ggplot(queens, aes(log10(queens.sale$gross.sqft), log10(queens.sale$sale.price.n)))
-y + geom_point()
-
-plot(log10(queens.homes$gross.sqft),log10(queens.homes$sale.price.n))
-plot((queens.homes$gross.sqft),(queens.homes$sale.price.n))
+sessionInfo()
 ```
 
