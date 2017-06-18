@@ -1,8 +1,8 @@
 ---
-title: "Queens_Data_Analysis"
+title: "Queens_Data_Cleaning"
 author: "Bryan_Kevin_Ruhaab"
 date: "June 15, 2017"
-output: word_document
+output: html_document
 ---
 
 # Queens Data Explaratory data Analysis
@@ -34,9 +34,10 @@ sessionInfo()
 ```
 
 Loading the Queens Dataset and exploratory
+
 ```{r}
 # read csv file
-queens<- data.frame(read.csv("C:/Users/kevolo/Desktop/smu/doing datascience/DoingDataScienceGroupProject/data/rollingsales_queens_clean.csv",skip=0,header=TRUE))
+queens<- read.csv("C:/Users/kevolo/Desktop/smu/doing datascience/DoingDataScienceGroupProject/data/rollingsales_queens.csv",skip=4,header=TRUE)
 
 dim(queens)
 
@@ -52,18 +53,24 @@ summary(queens)
 
 
 ```
-
+Clean the data
 
 ```{r}
-#plot(queens.sale$gross.sqft,queens.sale$sale.price.n)
-p <- ggplot(queens, aes(queens.sale$gross.sqft, queens.sale$sale.price.n))
-p + geom_point()
+queens$SALE.PRICE.N <- as.numeric(gsub("[^[:digit:]]","", queens$SALE.PRICE))
 
-#plot log10(queens.sale$gross.sqft,queens.sale$sale.price.n)
-y <- ggplot(queens, aes(log10(queens.sale$gross.sqft), log10(queens.sale$sale.price.n)))
-y + geom_point()
+#Check the number of NAs that exist
+count(is.na(queens$SALE.PRICE.N))
 
-plot(log10(queens.homes$gross.sqft),log10(queens.homes$sale.price.n))
-plot((queens.homes$gross.sqft),(queens.homes$sale.price.n))
+names(queens) <- tolower(names(queens)) # make all variable names lower case
+
+## Get rid of leading digits
+queens$gross.sqft <- as.numeric(gsub("[^[:digit:]]","", queens$gross.square.feet))
+queens$land.sqft <- as.numeric(gsub("[^[:digit:]]","", queens$land.square.feet))
+queens$year.built <- as.numeric(as.character(queens$year.built))
+
+attach(queens)
+#hist(sale.price.n) 
+qplot(sale.price.n, geom="histogram")
+detach(queens)
+
 ```
-
